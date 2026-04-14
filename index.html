@@ -523,6 +523,10 @@ const donutLabelPlugin = {
     const cy=(ca.top+ca.bottom)/2;
     const outerR=(Math.min(ca.right-ca.left, ca.bottom-ca.top)/2)*0.92;
 
+    // 차트 타입 판별: 금액/건수/대수
+    const isCountChart = chart.canvas.id==='c-new-donut'||chart.canvas.id==='c-ex-donut';
+    const isUnitChart  = chart.canvas.id==='c-unit-donut';
+
     meta.data.forEach((arc,i)=>{
       const v=ds.data[i];
       if(!v||v<=0) return;
@@ -535,14 +539,30 @@ const donutLabelPlugin = {
       const ly1=cy+Math.sin(midAngle)*r1;
       const lx2=cx+Math.cos(midAngle)*r2;
       const ly2=cy+Math.sin(midAngle)*r2;
-      const isLeft=lx2<cx;
+
+      // Others는 항상 오른쪽으로 꺾기
+      const isLeft = label==='Others' ? false : lx2<cx;
       const lx3=lx2+(isLeft?-8:8);
       const isK=currency==='KRW';
+
+      // 값 표시: 건수차트→건수, 대수차트→대수, 금액차트→금액(0이면 생략)
       let valStr;
-      if(isK) valStr=v>=1e9?(v/1e8).toFixed(1)+'억':(v/1e8).toFixed(1)+'억';
-      else    valStr=v>=1e6?'$'+(v/1e6).toFixed(1)+'M':'$'+(v/1e3).toFixed(0)+'K';
+      if(isCountChart){
+        valStr=Math.round(v)+'건';
+      } else if(isUnitChart){
+        valStr=Math.round(v)+'대';
+      } else {
+        // 금액 — 0.0억 같이 너무 작으면 %만 표시
+        if(isK){
+          const bil=v/1e8;
+          valStr=bil>=0.1?bil.toFixed(1)+'억':null;
+        } else {
+          valStr=v>=1e5?'$'+(v/1e6).toFixed(1)+'M':null;
+        }
+      }
+
       const line1=label;
-      const line2=valStr+' ('+pct.toFixed(1)+'%)';
+      const line2=valStr ? valStr+' ('+pct.toFixed(1)+'%)' : '('+pct.toFixed(1)+'%)';
 
       // 지시선
       const arcColor=(ds.backgroundColor instanceof Array)?ds.backgroundColor[i]:ds.backgroundColor;
