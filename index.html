@@ -265,7 +265,7 @@ footer{text-align:center;font-size:11px;color:var(--text3);padding:2rem;margin-t
         <div class="cl" id="reg-title">광역시도별 매출 순위</div>
         <button id="reg-back-btn" onclick="regDrillUp()" style="display:none;font-size:11px;font-family:inherit;padding:3px 10px;border:.5px solid var(--border);border-radius:999px;background:transparent;color:var(--text2);cursor:pointer">← 전체</button>
       </div>
-      <div class="cs" id="reg-sub">피벗 #7 기준 · 클릭하면 시군구 드릴다운</div>
+      <div class="cs" id="reg-sub" style="font-size:13px;font-weight:600;color:#3B82F6">👇 막대를 클릭하면 시군구 드릴다운</div>
       <div style="position:relative;height:340px"><canvas id="c-reg-bar"></canvas></div>
     </div>
     <div class="card full">
@@ -281,7 +281,7 @@ footer{text-align:center;font-size:11px;color:var(--text3);padding:2rem;margin-t
   <!-- 안내 문구 (전체 목록 상태에서만 표시) -->
   <div id="sr-guide" style="padding:8px 1.5rem 0">
     <span style="font-size:13px;font-weight:500;color:var(--text3)">
-      ☝️ 막대를 클릭하면 제품별 상세 현황이 나타납니다
+      👇 막대를 클릭하면 제품별 상세 현황이 나타납니다
     </span>
   </div>
   <div class="g2">
@@ -1051,12 +1051,12 @@ function renderRegionBar(drillRegion){
   if(drillRegion && DATA.region_detail[drillRegion]){
     items = DATA.region_detail[drillRegion].map(d=>({name:d.sub,val:d[ck]||0})).sort((a,b)=>b.val-a.val).slice(0,20);
     title = drillRegion+' 시군구별 매출';
-    sub = '피벗 #8 기준 · '+currency+' · 클릭하면 전체로';
+    sub = '← 클릭하면 전체 목록으로';
     const btn=document.getElementById('reg-back-btn'); if(btn) btn.style.display='inline-block';
   } else {
     items = DATA.region_total.map(d=>({name:d.region,val:d[ck]||0})).sort((a,b)=>b.val-a.val);
     title = '광역시도별 매출 순위';
-    sub = '피벗 #7 기준 · '+currency+' · 클릭하면 시군구 드릴다운';
+    sub = '👇 막대를 클릭하면 시군구 드릴다운';
     const btn=document.getElementById('reg-back-btn'); if(btn) btn.style.display='none';
   }
 
