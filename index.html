@@ -384,6 +384,7 @@ const PW_HASH = btoa('candela2026'); // base64 of password
 function tryUnlock(){
   const v = document.getElementById('pw-input').value;
   if(btoa(v) === PW_HASH){
+    localStorage.setItem('candela_auth', PW_HASH);
     document.getElementById('lock').style.display='none';
     init();
   } else {
@@ -1675,7 +1676,12 @@ window.onload=()=>{
     document.body.innerHTML='<div style="padding:2rem;font-family:sans-serif;color:#dc2626">Chart.js 로드 실패. 네트워크 연결을 확인하거나 새로고침 해주세요.</div>';
     return;
   }
-  document.getElementById('pw-input').focus();
+  if(localStorage.getItem('candela_auth') === PW_HASH){
+    document.getElementById('lock').style.display='none';
+    init();
+  } else {
+    document.getElementById('pw-input').focus();
+  }
 };
 </script>
 </body>
