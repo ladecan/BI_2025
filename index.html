@@ -850,7 +850,6 @@ function buildOverview(){
     return prev?Math.round((cur-prev)/Math.abs(prev)*100*10)/10:null;
   });
   const yoyPlugin={
-    id:'yoyLabelPlugin',
     afterDraw(chart){
       try{
         const xS=chart.scales.x, yS=chart.scales.y;
@@ -930,7 +929,6 @@ function buildOverview(){
     return prev?Math.round((cur-prev)/Math.abs(prev)*100*10)/10:null;
   });
   const recYoyPlugin={
-    id:'recYoyPlugin',
     afterDraw(chart){
       try{
         const xS=chart.scales.x,yS=chart.scales.y;
