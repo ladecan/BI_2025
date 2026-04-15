@@ -958,10 +958,13 @@ function buildOverview(){
             :('$'+(tot2/1e6).toFixed(1)+'M');
           ctx2.save();
           ctx2.font='10px -apple-system,sans-serif';
-          ctx2.fillStyle='#777';
+          ctx2.fillStyle='rgba(255,255,255,0.85)';
           ctx2.textAlign='center';
-          ctx2.textBaseline='top';
-          ctx2.fillText(totStr2,px2,yBot2+22);
+          ctx2.textBaseline='bottom';
+          ctx2.fillText(String(yrs[i]), px2, yBot2-18);
+          ctx2.font='9px -apple-system,sans-serif';
+          ctx2.fillStyle='rgba(255,255,255,0.7)';
+          ctx2.fillText(totStr2, px2, yBot2-6);
           ctx2.restore();
         });
       }catch(e){}
