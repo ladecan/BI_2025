@@ -558,13 +558,12 @@ const donutLabelPlugin = {
       // Others: 지시선 없이 오른쪽 상단에 작게 텍스트만 표기
       let isLeft, lx3, adjustedLy2;
       if(label==='Others'){
-        const fs = 9;
         ctx.save();
-        ctx.textAlign='right';
+        ctx.textAlign='left';
         ctx.textBaseline='top';
-        ctx.font=`500 ${fs}px -apple-system,sans-serif`;
+        ctx.font='500 9px -apple-system,sans-serif';
         ctx.fillStyle='#888';
-        ctx.fillText(`Others  ${line2}`, ca.right-4, ca.top+4);
+        ctx.fillText(`Others  ${line2}`, cx+outerR*0.3, ca.top+4);
         ctx.restore();
         return;
       } else {
