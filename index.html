@@ -188,7 +188,7 @@ footer{text-align:center;font-size:11px;color:var(--text3);padding:2rem;margin-t
   <button class="tab" onclick="goTab('product')">⚙️ 장비별 현황</button>
   <button class="tab" onclick="goTab('region')">📍 지역별 현황</button>
   <button class="tab" onclick="goTab('sr')">👤 담당자 성과</button>
-  <button class="tab" onclick="goTab('dealer')">🤝 딜러 분석</button>
+  <button class="tab" onclick="goTab('dealer')">🤝 딜러 분석 (BI Data 기준)</button>
   <button class="tab" onclick="goTab('detail')">📋 상세 현황</button>
 </div>
 
@@ -270,8 +270,8 @@ footer{text-align:center;font-size:11px;color:var(--text3);padding:2rem;margin-t
     </div>
     <div class="card full">
       <div class="cl">주요 지역 연도별 추이</div>
-      <div class="cs">서울 / 경기 / 부산 / 대구</div>
-      <div class="cw" style="height:200px"><canvas id="c-reg-yr"></canvas></div>
+      <div class="cs">서울 / 경기 / 경상 / 전라 / 충청 / 강원</div>
+      <div class="cw" style="height:240px"><canvas id="c-reg-yr"></canvas></div>
     </div>
   </div>
 </div>
@@ -1161,17 +1161,32 @@ function buildRegion(){
   regDrillRegion = null;
   renderRegionBar(null);
 
-  const top4Reg=['서울시','경기도','부산','대구 광역시'];
-  const col4=['#3B82F6','#10B981','#F59E0B','#7C3AED'];
+
+  // 지역 그룹 정의
+  const REG_GROUPS = [
+    { label:'서울', color:'#3B82F6',  regions:['서울시'] },
+    { label:'경기', color:'#60A5FA',  regions:['경기도','인천'] },
+    { label:'경상', color:'#10B981',  regions:['부산','대구 광역시','경상남도','경상북도','울산'] },
+    { label:'전라', color:'#F59E0B',  regions:['광주','전라남도','전라북도','제주도'] },
+    { label:'충청', color:'#8B5CF6',  regions:['대전','충청남도','충청북도','세종'] },
+    { label:'강원', color:'#6B7280',  regions:['강원도'] },
+  ];
+
   charts.regYr=new Chart(document.getElementById('c-reg-yr'),{
     type:'bar',
-    data:{labels:yrs.map(String),datasets:top4Reg.map((r,i)=>({
-      label:r, data:yrs.map(y=>DATA.region_by_year.find(d=>d.year===y&&d.region===r)?.[ck]||0),
-      backgroundColor:col4[i],borderRadius:3
+    data:{labels:yrs.map(String),datasets:REG_GROUPS.map(g=>({
+      label:g.label,
+      data:yrs.map(y=>
+        g.regions.reduce((s,r)=>s+(DATA.region_by_year.find(d=>d.year===y&&d.region===r)?.[ck]||0),0)
+      ),
+      backgroundColor:g.color, borderRadius:3
     }))},
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},
-        tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+fmtSm(c.raw)}}},
+      layout:{padding:{top:4}},
+      plugins:{
+        legend:{display:true,position:'bottom',labels:{font:{size:10},boxWidth:10,boxHeight:10,padding:8,color:'#9e9e98'}},
+        tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+fmtSm(c.raw)}}
+      },
       scales:{x:{grid:{display:false},ticks:TK},y:{grid:{color:GC,drawBorder:false},ticks:{...TK,callback:tickCur}}}}
   });
 }
